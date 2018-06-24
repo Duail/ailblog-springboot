@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: header}">
+</head>
+<body>
+<!-- Page Content -->
+<div class="container blog-content-container">
+
+    <div class="row">
+
+        <!-- Blog Entries Column -->
+        <div class="col-md-8">
+
+            <!-- Blog Post -->
+            <div class="card mb-4">
+                <div class="card-block">
+                    <h3 class="card-title>">
+                        <span>
+                            <a href="/u/brs" title="brs"><img src="/static/images/ppic.jpg" class="blog-avatar-40" alt="brs"></a>
+                            <a href="/u/brs/blogs/1" class="card-link" title="brs">1mybatis懒加载，tostring会触发加载</a>
+                        </span>
+                    </h3>
+                    <p class="card-text">
+                        lazyLoadTriggerMethods：指定哪个对象的方法触发一次延迟加载。默认值：equals,clone,hashCode,toString.
+                        所以，当打印对象时，由于触发了 toString 方法，所以触发了一次懒加载
+                    </p>
+                    <div class="card-text">
+                        <a href="/u/brs" class="card-link">brs</a> 发表于 2018-6-1 <i class="fa fa-hand-pointer-o" aria-hidden="true">210</i>
+                        <i class="fa fa-heart-o" aria-hidden="true">10</i> <i class="fa fa-comment-o" aria-hidden="true">110</i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Blog Post -->
+            <div class="card mb-4">
+                <div class="card-block">
+                    <h3 class="card-title>">
+                        <span>
+                            <a href="/u/brs" title="brs"><img src="/static/images/ppic.jpg" class="blog-avatar-40" alt="brs"></a>
+                            <a href="/u/brs/blogs/1" class="card-link" title="brs">2mybatis懒加载，tostring会触发加载</a>
+                        </span>
+                    </h3>
+                    <p class="card-text">
+                        lazyLoadTriggerMethods：指定哪个对象的方法触发一次延迟加载。默认值：equals,clone,hashCode,toString.
+                        所以，当打印对象时，由于触发了 toString 方法，所以触发了一次懒加载
+                    </p>
+                    <div class="card-text">
+                        <a href="/u/brs" class="card-link">brs</a> 发表于 2018-6-1 <i class="fa fa-hand-pointer-o" aria-hidden="true">210</i>
+                        <i class="fa fa-heart-o" aria-hidden="true">10</i> <i class="fa fa-comment-o" aria-hidden="true">110</i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Blog Post -->
+            <div class="card mb-4">
+                <div class="card-block">
+                    <h3 class="card-title>">
+                        <span>
+                            <a href="/u/brs" title="brs"><img src="/static/images/ppic.jpg" class="blog-avatar-40" alt="brs"></a>
+                            <a href="/u/brs/blogs/1" class="card-link" title="brs">3mybatis懒加载，tostring会触发加载</a>
+                        </span>
+                    </h3>
+                    <p class="card-text">
+                        lazyLoadTriggerMethods：指定哪个对象的方法触发一次延迟加载。默认值：equals,clone,hashCode,toString.
+                        所以，当打印对象时，由于触发了 toString 方法，所以触发了一次懒加载
+                    </p>
+                    <div class="card-text">
+                        <a href="/u/brs" class="card-link">brs</a> 发表于 2018-6-1 <i class="fa fa-hand-pointer-o" aria-hidden="true">210</i>
+                        <i class="fa fa-heart-o" aria-hidden="true">10</i> <i class="fa fa-comment-o" aria-hidden="true">110</i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Blog Post -->
+            <div class="card mb-4">
+                <div class="card-block">
+                    <h3 class="card-title>">
+                        <span>
+                            <a href="/u/brs" title="brs"><img src="/static/images/ppic.jpg" class="blog-avatar-40" alt="brs"></a>
+                            <a href="/u/brs/blogs/1" class="card-link" title="brs">4mybatis懒加载，tostring会触发加载</a>
+                        </span>
+                    </h3>
+                    <p class="card-text">
+                        lazyLoadTriggerMethods：指定哪个对象的方法触发一次延迟加载。默认值：equals,clone,hashCode,toString.
+                        所以，当打印对象时，由于触发了 toString 方法，所以触发了一次懒加载
+                    </p>
+                    <div class="card-text">
+                        <a href="/u/brs" class="card-link">brs</a> 发表于 2018-6-1 <i class="fa fa-hand-pointer-o" aria-hidden="true">210</i>
+                        <i class="fa fa-heart-o" aria-hidden="true">10</i> <i class="fa fa-comment-o" aria-hidden="true">110</i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pagination -->
+            <nav>
+                <ul class="pagination justify-content-center mb-4">
+                    <li class="page-item">
+                        <a href="#" class="page-link" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    <li class="page-item active"><a href="#" class="page-link">1</a></li>
+                    <li class="page-item"><a href="#" class="page-link">2</a></li>
+                    <li class="page-item"><a href="#" class="page-link">3</a></li>
+                    <li class="page-item"><a href="#" class="page-link">4</a></li>
+                    <li class="page-item"><a href="#" class="page-link">5</a></li>
+                    <li class="page-item"><a href="#" class="page-link">6</a></li>
+                    <li class="page-item"><a href="#" class="page-link">7</a></li>
+                    <li class="page-item">
+                        <a href="#" class="page-link" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+
+        <!-- 右侧栏目 -->
+        <div class="col-md-4">
+
+            <!-- 热门标签 -->
+            <div class="card ">
+                <h5 class="card-header"><i class="fa fa-tags" aria-hidden="true"></i> 热门标签</h5>
+                <div class="card-block">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <a href="/blogs?keyword=web"> <span class="badge badge-info">Web Design</span></a>
+                            <a href="/blogs?keyword=Web"> <span class="badge badge-info">Jersey</span></a>
+                            <a href="/blogs?keyword=Web"> <span class="badge badge-info">JavaScript</span></a>
+                            <a href="/blogs?keyword=Web"> <span class="badge badge-info">CSS</span></a>
+                            <a href="/blogs?keyword=Web"> <span class="badge badge-info">Java</span></a>
+                            <a href="/blogs?keyword=Web"> <span class="badge badge-info">Freebies</span></a>
+                            <a href="/blogs?keyword=Web"> <span class="badge badge-info">Web Design</span></a>
+                            <a href="/blogs?keyword=Web"> <span class="badge badge-info">Jersey</span></a>
+                            <a href="/blogs?keyword=Web"> <span class="badge badge-info">JavaScript</span></a>
+                            <a href="/blogs?keyword=Web"> <span class="badge badge-info">CSS</span></a>
+                            <a href="/blogs?keyword=Web"> <span class="badge badge-info">Java</span></a>
+                            <a href="/blogs?keyword=Web"> <span class="badge badge-info">Freebies</span></a>
+                            <a href="/blogs?keyword=Web"> <span class="badge badge-info">Web Design</span></a>
+                            <a href="/blogs?keyword=Web"> <span class="badge badge-info">Jersey</span></a>
+                            <a href="/blogs?keyword=Web"> <span class="badge badge-info">JavaScript</span></a>
+                            <a href="/blogs?keyword=Web"> <span class="badge badge-info">CSS</span></a>
+                            <a href="/blogs?keyword=Web"> <span class="badge badge-info">Java</span></a>
+                            <a href="/blogs?keyword=Web"> <span class="badge badge-info">Freebies</span></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 热门用户 -->
+            <div class="card my-4">
+                <h5 class="card-header"><i class="fa fa-users" aria-hidden="true"></i> 热门用户</h5>
+                <div class="card-block">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <span>
+                                <a href="/u/brs" title="brs"><img src="/static/images/ppic.jpg" class="blog-avatar-40" alt="brs"></a>
+                            </span>
+                            <span>
+                                <a href="/u/brs" title="brs"><img src="/static/images/ppic.jpg" class="blog-avatar-40" alt="brs"></a>
+                            </span>
+                            <span>
+                                <a href="/u/brs" title="brs"><img src="/static/images/ppic.jpg" class="blog-avatar-40" alt="brs"></a>
+                            </span>
+                            <span>
+                                <a href="/u/brs" title="brs"><img src="/static/images/ppic.jpg" class="blog-avatar-40" alt="brs"></a>
+                            </span>
+                            <span>
+                                <a href="/u/brs" title="brs"><img src="/static/images/ppic.jpg" class="blog-avatar-40" alt="brs"></a>
+                            </span>
+                            <span>
+                                <a href="/u/brs" title="brs"><img src="/static/images/ppic.jpg" class="blog-avatar-40" alt="brs"></a>
+                            </span>
+                            <span>
+                                <a href="/u/brs" title="brs"><img src="/static/images/ppic.jpg" class="blog-avatar-40" alt="brs"></a>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 热门文章 -->
+            <div class="card my-4">
+                <h5 class="card-header"><i class="fa fa-fire" aria-hidden="true"></i> 热门文章</h5>
+
+                <div class="list-group">
+                    <a href="/u/waylau/blogs/1" class="list-group-item" title="brs">
+                        Spring Data + Thymeleaf 3 + Bootstrap 4 实现分页器
+                        <span class="badge badge-danger badge-pill">11115</span>
+                    </a>
+                    <a href="/u/brs/blogs/1" class="list-group-item" title="brs">
+                        用大白话聊聊分布式系统
+                        <span class="badge badge-warning badge-pill">2222</span>
+                    </a>
+                    <a href="/u/brs/blogs/1" class="list-group-item" title="brs">
+                        用大白话聊聊分布式系统
+                        <span class="badge badge-info badge-pill">113</span>
+                    </a>
+                    <a href="/u/brs/blogs/1" class="list-group-item" title="brs">
+                        用大白话聊聊分布式系统
+                        <span class="badge badge-info badge-pill">21</span>
+                    </a>
+                </div>
+
+            </div>
+
+            <!-- 最新发布 -->
+            <div class="card my-4">
+                <h5 class="card-header"><i class="fa fa-line-chart" aria-hidden="true"></i> 最新发布</h5>
+                <div class="list-group">
+                    <a href="/u/waylau/blogs/1" class="list-group-item" title="brs">
+                        Spring Data + Thymeleaf 3 + Bootstrap 4 实现分页器
+                    </a>
+                    <a href="/u/brs/blogs/1" class="list-group-item" title="brs">
+                        用大白话聊聊分布式系
+                    </a>
+                    <a href="/u/brs/blogs/1" class="list-group-item" title="brs">
+                        用大白话聊聊分布式系
+                    </a>
+                    <a href="/u/brs/blogs/1" class="list-group-item" title="brs">
+                        用大白话聊聊分布式系
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!-- /.row -->
+
+</div>
+<!-- /.container -->
+
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>
