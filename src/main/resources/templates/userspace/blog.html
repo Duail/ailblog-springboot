@@ -18,7 +18,7 @@
                     <h2 class="card-title">
                         <span>
                             <a href="/u/brs" title="brs" th:href="'/u/'+${blog.user.username}">
-                                <img th:src="${blog.user.avatar} == null ? '/static/images/ppic.jpg' : ${blog.user.avatar}"
+                                <img src="/static/images/ppic.jpg" th:src="${blog.user.avatar} == null ? '/static/images/ppic.jpg' : ${blog.user.avatar}"
                                  class="blog-avatar-40">
                             </a>
                         </span>
@@ -31,8 +31,8 @@
                         <a href="/u/brs" th:href="'/u/'+${blog.user.username}" class="card-link" th:text="${blog.user.username}">brs</a>
                         发表于 [[${#dates.format(blog.createTime, 'yyyy-MM-dd HH:mm')}]] <i class="fa fa-hand-pointer-o" aria-hidden="true"> [[${blog.readSize}]]</i>
                         <i class="fa fa-heart-o" aria-hidden="true"> [[${blog.voteSize}]]</i> <i class="fa fa-comment-o" aria-hidden="true"> [[${blog.commentSize}]]</i>
-                        <a href="/u/brs/blogs/edit/1" th:if="isOwner" th:href="'/u/'+${blog.user.username}+'/blogs/edit/'+${blog.id}" class="btn btn-primary float-right">编辑</a>
-                        <a href="javascript:void(0)" th:if="isOwner" class="btn btn-primary float-right deleteBlog">删除</a>
+                        <a href="/u/brs/blogs/edit/1" th:if="${isOwner}" th:href="'/u/'+${blog.user.username}+'/blogs/edit/'+${blog.id}" class="btn btn-primary float-right">编辑</a>
+                        <a href="javascript:void(0)" th:if="${isOwner}" class="btn btn-primary float-right deleteBlog">删除</a>
                     </div>
                     <hr>
                     <!--utext会解析html-->
@@ -43,16 +43,12 @@
 
 
                     <h5>分类：
-                        <a href="/u/waylau/blogs?category=11">Spring Data</a>
+                        <a href="/u/waylau/blogs?category=1" th:href="'/u/'+${blog.user.username}+'/blogs?catalogId='+${blog.catalog.id}" th:text="${blog.catalog.name}">Spring Data</a>
                     </h5>
 
                     <h5>标签：
-                        <a href="/u/waylau/blogs?keyword=分布式"> <span class="badge badge-default">Web Design</span></a>
-                        <a href="/u/waylau/blogs?keyword=分布式"> <span class="badge badge-default">Jersey</span></a>
-                        <a href="/u/waylau/blogs?keyword=分布式"> <span class="badge badge-default">JavaScript</span></a>
-                        <a href="/u/waylau/blogs?keyword=分布式"> <span class="badge badge-default">CSS</span></a>
-                        <a href="/u/waylau/blogs?keyword=分布式"> <span class="badge badge-default">Java</span></a>
-                        <a href="/u/waylau/blogs?keyword=分布式"> <span class="badge badge-default">Freebies</span></a>
+                        <a th:each="tag : ${#strings.arraySplit(blog.tags, ',')}" th:href="'/u/'+${blog.user.username}+'/blogs?keyword='+${tag}"
+                           href="/u/brs/blogs?keyword=分布式"> <span class="badge badge-default" th:text="${tag}">Web Design</span></a>
                     </h5>
                 </div>
 
@@ -65,25 +61,27 @@
                             <textarea class="blog-textarea" placeholder="看帖需留言~"></textarea>
                         </div>
                     </div>
-                    <button class="btn btn-primary float-right">发表评论</button>
-                    <button class="btn btn-primary float-right">点赞</button>
+                    <button class="btn btn-primary float-right" id="submitComment">发表评论</button>
+                    <button th:if="${currentVote}==null" class="btn btn-primary float-right" id="create-vote">点赞</button>
+                    <button th:if="${currentVote}!=null" class="btn btn-danger float-right" th:attr="voteId=${currentVote.id}" id="remove-vote">取消点赞</button>
 
                 </div>
 
-                <div class="card-block">
+                <div class="card-block" id="mainContainer">
 
-                    <div class="row">
+                    <div class="row" id="mainContainerReplace" th:each="comment : ${commentList}">
                         <h2 class="card-title col-lg-1 col-md-2">
 							<span>
-			                  <a href="/u/brs" title="brs">
-			                    <img src="/static/images/ppic.jpg" class="blog-avatar-40"
-                                     alt="brs">
+			                  <a href="/u/brs" th:href="'/u/'+${comment.user.username}" th:title="${comment.user.username}">
+			                    <img src="/static/images/ppic.jpg" th:src="${comment.user.avatar} ==null ? '/static/images/ppic.jpg' : ${comment.user.avatar}"
+                                     class="blog-avatar-40">
 			                  </a>
 					        </span>
                         </h2>
                         <div class="card-text col-lg-11 col-md-10">
-                            <a href="/u/waylau" class="card-link">brs</a> 1楼 2018-6-1 14:20
-                            <p>不错哦，顶起！</p>
+                            <a href="/u/brs" th:href="'/u/'+${comment.user.username}" th:text="${comment.user.username}" class="card-link">brs</a> [[${comment.id}]]楼 [[${#dates.format(comment.createTime, 'yyyy-MM-dd HH:mm')}]]
+                            <a href="javascript:void(0)" class="delete-comment" th:if="${currentUser} eq ${comment.user.username}" th:attr="commentId=${comment.id}"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+                            <p th:text="${comment.content}">不错哦，顶起！</p>
                         </div>
                     </div>
 

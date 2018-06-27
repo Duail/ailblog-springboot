@@ -1,8 +1,11 @@
 package com.brs.ailblog.controller;
 import javax.xml.parsers.DocumentBuilder;
 import com.brs.ailblog.domain.Blog;
+import com.brs.ailblog.domain.Catalog;
 import com.brs.ailblog.domain.User;
+import com.brs.ailblog.domain.Vote;
 import com.brs.ailblog.service.BlogService;
+import com.brs.ailblog.service.CatalogService;
 import com.brs.ailblog.service.UserService;
 import com.brs.ailblog.util.ConstraintViolationExceptionHandler;
 import com.brs.ailblog.vo.Response;
@@ -42,11 +45,14 @@ public class UserspaceController {
 
     private final BlogService blogService;
 
+    private final CatalogService catalogService;
+
     @Autowired
-    public UserspaceController(UserDetailsService userDetailsService, UserService userService, BlogService blogService) {
+    public UserspaceController(UserDetailsService userDetailsService, UserService userService, BlogService blogService, CatalogService catalogService) {
         this.userDetailsService = userDetailsService;
         this.userService = userService;
         this.blogService = blogService;
+        this.catalogService = catalogService;
     }
 
     @GetMapping("/{username}")
@@ -59,8 +65,8 @@ public class UserspaceController {
     @GetMapping("/{username}/blogs")
     public String listBlogsByOrder(@PathVariable("username") String username,
                                    @RequestParam(value = "order", required = false, defaultValue = "new") String order,
-                                   @RequestParam(value = "category", required = false) Long category,
-                                   @RequestParam(value = "keyword", required = false) String keyword,
+                                   @RequestParam(value = "catalogId", required = false) Long catalogId,
+                                   @RequestParam(value = "keyword", required = false) String keyword,//title&tag都是通过keyword
                                    @RequestParam(value = "async", required = false) boolean async,
                                    @RequestParam(value = "pageIndex", required = false, defaultValue = "0") int pageIndex,
                                    @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize,
@@ -69,8 +75,10 @@ public class UserspaceController {
         User user = (User) userDetailsService.loadUserByUsername(username);
         Page<Blog> page = null;
 
-        if (category != null) {
-            //todo
+        if (catalogId != null) {
+            Catalog catalog = catalogService.getCatalogById(catalogId);
+            Pageable pageable = new PageRequest(pageIndex, pageSize);
+            page = blogService.listBlogsByCatalog(catalog, pageable);
         } else if (order.equals("hot")) {
             Sort sort = new Sort(Sort.Direction.DESC, "readSize", "commentSize", "voteSize");
             Pageable pageable = new PageRequest(pageIndex, pageSize, sort);
@@ -84,7 +92,7 @@ public class UserspaceController {
 
         model.addAttribute("user", user);
         model.addAttribute("order", order);
-        model.addAttribute("category", category);
+        model.addAttribute("catalogId", catalogId);
         model.addAttribute("keyword", keyword);
         model.addAttribute("page", page);
         model.addAttribute("blogList", list);
@@ -112,6 +120,18 @@ public class UserspaceController {
             }
         }
 
+        //判断点赞情况
+        List<Vote> votes = blog.getVotes();
+        Vote currentVote = null;
+        if (principal != null) {
+            for (Vote vote : votes) {
+                if (vote.getUser().getId().equals(principal.getId())) {
+                    currentVote = vote;
+                }
+            }
+        }
+
+        model.addAttribute("currentVote", currentVote);
         model.addAttribute("isOwner", isOwner);
         model.addAttribute("blog", blog);
         return "userspace/blog";
@@ -125,6 +145,9 @@ public class UserspaceController {
      */
     @GetMapping("/{username}/blogs/edit")
     public String createBlog(@PathVariable("username") String username, Model model) {
+        User user = (User) userDetailsService.loadUserByUsername(username);
+        List<Catalog> catalogs = catalogService.listCatelogs(user);
+        model.addAttribute("catalogs", catalogs);
         model.addAttribute("blog", new Blog(null, null, null));
         model.addAttribute("fileServerUrl", fileServerUrl);
         return "userspace/blogedit";
@@ -139,6 +162,9 @@ public class UserspaceController {
      */
     @GetMapping("/{username}/blogs/edit/{id}")
     public String editBlog(@PathVariable("username") String username, @PathVariable("id") Long id, Model model) {
+        User user = (User) userDetailsService.loadUserByUsername(username);
+        List<Catalog> catalogs = catalogService.listCatelogs(user);
+        model.addAttribute("catalogs", catalogs);
         model.addAttribute("blog", blogService.getBlogById(id));
         model.addAttribute("fileServerUrl", fileServerUrl);
         return "userspace/blogedit";
@@ -153,12 +179,18 @@ public class UserspaceController {
     @PostMapping("/{username}/blogs/edit")
     @PreAuthorize("authentication.name.equals(#username)")
     public ResponseEntity<Response> saveBlog(@PathVariable("username") String username, @RequestBody Blog blog) {
+
+        if (blog.getCatalog().getId() == null) {
+            return ResponseEntity.ok().body(new Response(false, "未选择分类"));
+        }
         try {
             if (blog.getId() != null) {
                 Blog orignalBlog = blogService.getBlogById(blog.getId());
                 orignalBlog.setTitle(blog.getTitle());
                 orignalBlog.setSummary(blog.getSummary());
                 orignalBlog.setContent(blog.getContent());
+                orignalBlog.setCatalog(blog.getCatalog());
+                orignalBlog.setTags(blog.getTags());
                 blogService.saveBlog(orignalBlog);
             } else {
                 User user = (User) userDetailsService.loadUserByUsername(username);

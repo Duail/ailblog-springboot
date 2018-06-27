@@ -8,6 +8,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.List;
 
 /**
  * @Description:
@@ -66,6 +67,22 @@ public class Blog implements Serializable {
 
     @Column(name = "tags", length = 100)
     private String tags;
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(name = "blog_comment",
+            joinColumns = @JoinColumn(name = "blog_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "comment_id", referencedColumnName = "id"))
+    private List<Comment> comments;
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)//todo ??
+    @JoinTable(name = "blog_vote",
+            joinColumns = @JoinColumn(name = "blog_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "vote_id", referencedColumnName = "id"))
+    private List<Vote> votes;
+
+    @OneToOne(cascade = CascadeType.DETACH, fetch = FetchType.LAZY)
+    @JoinColumn(name = "catalog_id")
+    private Catalog catalog;
 
     protected Blog() {
     }
@@ -163,5 +180,86 @@ public class Blog implements Serializable {
 
     public void setTags(String tags) {
         this.tags = tags;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
+        this.commentSize = this.comments.size();
+    }
+
+    public List<Vote> getVotes() {
+        return votes;
+    }
+
+    public void setVotes(List<Vote> votes) {
+        this.votes = votes;
+        this.voteSize = this.votes.size();
+    }
+
+    public Catalog getCatalog() {
+        return catalog;
+    }
+
+    public void setCatalog(Catalog catalog) {
+        this.catalog = catalog;
+    }
+
+    /**
+     * 添加评论
+     * @param comment
+     */
+    public void addComment(Comment comment) {
+        this.comments.add(comment);//持久化时自动存到tomany表中
+        this.commentSize = this.comments.size();
+    }
+
+    /**
+     * 删除评论
+     * @param commentId
+     */
+    public void removeComment(Long commentId) {
+        for (int index = 0; index < this.comments.size(); index++) {
+            if (comments.get(index).getId().equals(commentId)) {//todo ??
+                this.comments.remove(index);
+                break;
+            }
+        }
+        this.commentSize = this.comments.size();
+    }
+
+    /**
+     * 点赞
+     * @param vote
+     */
+    public boolean addVote(Vote vote) {
+        boolean isExit = false;
+        for (int index = 0; index < this.votes.size(); index++) {
+            if (votes.get(index).getUser().getId().equals(vote.getUser().getId())) {
+                isExit = true;
+                break;
+            }
+        }
+        if (!isExit) {
+            this.votes.add(vote);
+            this.voteSize = this.votes.size();
+        }
+        return isExit;
+    }
+
+    /**
+     * 取消点赞
+     */
+    public void removeVote(Long voteId) {
+        for (int index = 0; index < this.votes.size(); index++) {
+            if (this.votes.get(index).getId().equals(voteId)) {
+                this.votes.remove(index);
+                break;
+            }
+        }
+        this.voteSize = this.votes.size();
     }
 }

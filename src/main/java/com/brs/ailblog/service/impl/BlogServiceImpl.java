@@ -1,12 +1,12 @@
 package com.brs.ailblog.service.impl;
 
-import com.brs.ailblog.domain.Blog;
-import com.brs.ailblog.domain.User;
+import com.brs.ailblog.domain.*;
 import com.brs.ailblog.repository.BlogRepository;
 import com.brs.ailblog.service.BlogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 /**
@@ -67,5 +67,42 @@ public class BlogServiceImpl implements BlogService {
         Blog blog = blogRepository.findOne(id);
         blog.setReadSize(blog.getReadSize() + 1);
         this.saveBlog(blog);
+    }
+
+    @Override
+    public Blog createComment(Long blogId, String commentContent) {
+        Blog originalBlog = blogRepository.findOne(blogId);
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Comment comment = new Comment(commentContent, user);
+        originalBlog.addComment(comment);
+        return this.saveBlog(originalBlog);
+    }
+
+    @Override
+    public void removeComment(Long blogId, Long commentId) {
+        Blog originalBlog = blogRepository.findOne(blogId);
+        originalBlog.removeComment(commentId);
+        this.saveBlog(originalBlog);
+    }
+
+    @Override
+    public Blog createVote(Long blogId) {
+        Blog originalBlog = blogRepository.findOne(blogId);
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Vote vote = new Vote(user);
+        originalBlog.addVote(vote);
+        return this.saveBlog(originalBlog);
+    }
+
+    @Override
+    public void removeVote(Long blogId, Long voteId) {
+        Blog originalBlog = blogRepository.findOne(blogId);
+        originalBlog.removeVote(voteId);
+        this.saveBlog(originalBlog);
+    }
+
+    @Override
+    public Page<Blog> listBlogsByCatalog(Catalog catalog, Pageable pageable) {
+        return blogRepository.findByCatalog(catalog, pageable);
     }
 }

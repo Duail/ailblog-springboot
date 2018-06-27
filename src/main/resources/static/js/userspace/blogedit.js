@@ -37,7 +37,7 @@ $(function() {
 
     // 发布博客
     $("#submitBlog").click(function() {
-
+        debugger;
         // 获取 CSRF Token
         var csrfToken = $("meta[name='_csrf']").attr("content");
         var csrfHeader = $("meta[name='_csrf_header']").attr("content");
@@ -68,6 +68,11 @@ $(function() {
             error : function() {
                 toastr.error("error!");
             }
-        })
-    })
+        });
+    });
+
+    // 初始化标签
+    $('.form-control-tag').tagsInput({
+        'defaultText':'输入标签'
+    });
 });

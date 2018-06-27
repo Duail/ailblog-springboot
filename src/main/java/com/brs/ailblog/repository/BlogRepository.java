@@ -1,6 +1,7 @@
 package com.brs.ailblog.repository;
 
 import com.brs.ailblog.domain.Blog;
+import com.brs.ailblog.domain.Catalog;
 import com.brs.ailblog.domain.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,4 +19,7 @@ public interface BlogRepository extends JpaRepository<Blog, Long> {
 
     //根据用户名、博客查询博客列表（时间逆序）
     Page<Blog> findByTitleLikeAndUserOrTagsLikeAndUserOrderByCreateTimeDesc(String title, User user, String tags, User user2, Pageable pageable);
+
+    //根据分类查询博客列表
+    Page<Blog> findByCatalog(Catalog catalog, Pageable pageable);
 }
