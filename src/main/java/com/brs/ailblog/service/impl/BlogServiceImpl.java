@@ -1,13 +1,18 @@
 package com.brs.ailblog.service.impl;
 
 import com.brs.ailblog.domain.*;
+import com.brs.ailblog.domain.es.EsBlog;
 import com.brs.ailblog.repository.BlogRepository;
+import com.brs.ailblog.repository.es.EsBlogRepository;
 import com.brs.ailblog.service.BlogService;
+import com.brs.ailblog.service.EsBlogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
 
 /**
  * @Description:
@@ -19,19 +24,39 @@ public class BlogServiceImpl implements BlogService {
 
     private final BlogRepository blogRepository;
 
+    private final EsBlogService esBlogService;
+
     @Autowired
-    public BlogServiceImpl(BlogRepository blogRepository) {
+    public BlogServiceImpl(BlogRepository blogRepository, EsBlogService esBlogService) {
         this.blogRepository = blogRepository;
+        this.esBlogService = esBlogService;
     }
 
+    @Transactional
     @Override
     public Blog saveBlog(Blog blog) {
-        return blogRepository.save(blog);
+        boolean isNew = (blog.getId() == null);
+        EsBlog esBlog = null;
+
+        Blog returnBlog = blogRepository.save(blog);
+
+        if (isNew) {
+            esBlog = new EsBlog(returnBlog);
+        } else {
+            esBlog = esBlogService.getEsBlogByBlogId(blog.getId());
+            esBlog.update(returnBlog);
+        }
+
+        esBlogService.updateEsBlog(esBlog);
+        return returnBlog;
     }
 
+    @Transactional
     @Override
     public void removeBlog(Long id) {
         blogRepository.delete(id);
+        EsBlog esBlog = esBlogService.getEsBlogByBlogId(id);
+        esBlogService.removeEsBlog(esBlog.getId());
     }
 
     @Override
