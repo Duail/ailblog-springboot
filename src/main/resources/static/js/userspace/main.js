@@ -11,7 +11,7 @@ $(function() {
 		$.ajax({ 
 			 url: avatarApi, 
 			 success: function(data){
-				 $("#avatarFormContainer").html(data);
+			 $("#avatarFormContainer").html(data);
 		     },
 		     error : function() {
 		    	 toastr.error("error!");
@@ -66,25 +66,25 @@ $(function() {
 					 contentType: "application/json; charset=utf-8",
 					 data: JSON.stringify({"id":Number($("#userId").val()), "avatar":avatarUrl}),
 					 beforeSend: function(request) {
-		                 request.setRequestHeader(csrfHeader, csrfToken); // 添加  CSRF Token 
-		             },
+		                         request.setRequestHeader(csrfHeader, csrfToken); // 添加  CSRF Token 
+		                         },
 					 success: function(data){
 						 if (data.success) {
 							// 成功后，置换头像图片
 							//  $(".blog-avatar").attr("src", data.avatarUrl);
-                             location.reload();
+                                                         location.reload();
 						 } else {
 							 toastr.error("error!"+data.message);
 						 }
 						 
-				     },
-				     error : function() {
+				        },
+				         error : function() {
 				    	 toastr.error("error!");
-				     }
+				       }
 				 });
-	        },
+	            },
 		    error : function() {
-		    	 toastr.error("error!");
+		        toastr.error("error!");
 		    }
 		})
 	});
